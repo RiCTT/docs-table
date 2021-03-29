@@ -1,24 +1,8 @@
 # docs-table
 
-## Project setup
-```
-npm install
-```
+## introduction
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
+ 模拟移动端excel表格，批量选中，修改数据的轮子
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
