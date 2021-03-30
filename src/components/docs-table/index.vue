@@ -1,10 +1,12 @@
 <template>
-  <div>表格组件</div>
+	<div>表格组件</div>
 </template>
 
-<script>
-export default {
-  
+<script lang="ts">
+import { Vue } from 'vue-class-component'
+
+export default class DocsTable extends Vue{
+
 }
 </script>
 
