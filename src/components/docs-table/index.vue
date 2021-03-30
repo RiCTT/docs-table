@@ -5,11 +5,9 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component'
 
-export default class DocsTable extends Vue{
-
+export default class DocsTable extends Vue {
 }
 </script>
 
 <style>
-
 </style>
