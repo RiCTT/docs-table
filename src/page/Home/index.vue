@@ -18,7 +18,7 @@ export default class Home extends Vue {}
 
 <style lang="stylus" scoped>
 .home {
-	margin: 10px;
-	border: 1px solid skyblue;
+  padding: 10px 0 10px 15px;
+  height: 300px;
 }
 </style>

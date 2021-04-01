@@ -52,11 +52,11 @@
    text-decoration: none;
    -webkit-backface-visibility: hidden;
  }
- ::-webkit-scrollbar{
+ /* ::-webkit-scrollbar{
    width: 5px;
    height: 5px;
- }
- ::-webkit-scrollbar-track-piece{
+ } */
+ /* ::-webkit-scrollbar-track-piece{
    background-color: rgba(0, 0, 0, 0.2);
    -webkit-border-radius: 6px;
  }
@@ -69,7 +69,7 @@
    width: 5px;
    background-color: rgba(125, 125, 125, 0.7);
    -webkit-border-radius: 6px;
- }
+ } */
  html, body{
    width: 100%;
    font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", "微软雅黑", sans-serif;
