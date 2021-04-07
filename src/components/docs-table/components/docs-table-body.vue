@@ -4,7 +4,7 @@
       <tbody>
         <tr class="body-tr" v-for="(col, $index) in columns" :key="$index">
           <td class="body-td left">{{col.text}}</td>
-          <td class="body-td" v-for="(d, $$index) in col.data" :key="$$index">
+          <td class="body-td" v-for="(d, $$index) in col.data" :key="$$index" @click="handleCellClick(d, $event)">
             {{d.text}}
           </td>
         </tr>
@@ -26,20 +26,26 @@ export default {
     columns () {
       console.log('__watch')
     }
+  },
+  setup (props, context) {
+    const handleCellClick = (cell, e) => {
+      const rect = e.target.getBoundingClientRect()
+      context.emit('set-box', rect)
+    }
+
+    return {
+      handleCellClick
+    }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
 .table-body {
-  position: relative;
-  z-index: -1;
   border-collapse: separate;
 }
 
 .docs-table-body {
-  position: relative;
-  width: 100%;
 }
 
 .body-tr {
