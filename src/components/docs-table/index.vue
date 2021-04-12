@@ -1,15 +1,15 @@
 <template>
-	<div class="table-wrapper">
+	<div class="table-wrapper" @scroll="handleScroll">
     <div class="inner-wrapper">
-      <docs-table-header :headers="headers"></docs-table-header>
-      <docs-table-body :columns="columns" @set-box="handleSetBox"></docs-table-body>
-      <docs-table-choiceBox ref="choiceBox" v-model="showBox"></docs-table-choiceBox>
+      <docs-table-header :headers="headers" :scrollLeft="scrollLeft" @set-box="handleSetBox"></docs-table-header>
+      <docs-table-body :columns="columns" :scrollTop="scrollTop" :scrollLeft="scrollLeft" @set-box="handleSetBox"></docs-table-body>
+      <docs-table-choiceBox ref="choiceBoxRef" v-model="showBox"></docs-table-choiceBox>
     </div>
 	</div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import docsTableHeader from './components/docs-table-header.vue'
 import docsTableBody from './components/docs-table-body.vue'
 import docsTableChoiceBox from './components/docs-table-choicebox.vue'
@@ -21,6 +21,7 @@ export default {
     const columns = ref([])
     const showBox = ref(false)
     const choiceBoxRef = ref(null)
+    const data = reactive({ scrollTop: 0, scrollLeft: 0 })
 
     const getHeaders = () => {
       const array = []
@@ -44,20 +45,27 @@ export default {
     columns.value = getColumns()
 
     const handleSetBox = (rect) => {
-      console.log('___rect')
-      console.log(rect)
       const { x, y, width, height } = rect
-      console.log(choiceBoxRef)
-      console.log(choiceBoxRef.value)
-      choiceBoxRef.value.choiceBox.setBoxStyle(x, y, width, height)
+      choiceBoxRef.value.setBoxStyle(x, y, width, height)
     }
+
+    const handleScroll = (e) => {
+      const target = e.target
+      const { scrollTop, scrollLeft } = target
+      data.scrollTop = scrollTop
+      data.scrollLeft = scrollLeft
+    }
+
+    const dataAsRefs = toRefs(data)
 
     return {
       headers,
       columns,
       showBox,
       handleSetBox,
-      choiceBoxRef
+      choiceBoxRef,
+      handleScroll,
+      ...dataAsRefs
     }
   }
 }

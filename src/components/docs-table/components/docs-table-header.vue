@@ -3,7 +3,7 @@
     <table class="docs-table-header">
       <thead class="table-thead">
         <tr class="thead-tr">
-          <th class="thead-th" v-for="(item, index) in headers" :key="index">
+          <th class="thead-th" v-for="(item, index) in headers" :key="index" @click="handleSelectCol(index, $event)">
             {{item.text}}
           </th>
         </tr>
@@ -13,20 +13,35 @@
 </template>
 
 <script>
-import { toRefs } from 'vue'
+let headerHeight = null
+
 export default {
   name: 'docs-table-header',
   props: {
     headers: {
       type: Array
+    },
+    scrollLeft: {
+      type: Number,
+      default: 0
     }
   },
-  setup (props) {
-    const { headers } = toRefs(props)
-    console.log('__headers')
-    console.log(headers)
+  setup (props, context) {
+    const handleSelectCol = (colIndex, e) => {
+      if (colIndex === 0) return
+      const rect = e.target.getBoundingClientRect()
+      if (!headerHeight) {
+        const e = document.querySelector('.docs-table-body .table-body')
+        const boxRect = e.getBoundingClientRect()
+        headerHeight = boxRect.height
+      }
+      rect.x = rect.x + props.scrollLeft
+      rect.y = rect.top + rect.height
+      rect.height = headerHeight
+      context.emit('set-box', rect)
+    }
     return {
-
+      handleSelectCol
     }
   }
 }
@@ -38,7 +53,7 @@ export default {
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 12;
 }
 
 .docs-table-header {

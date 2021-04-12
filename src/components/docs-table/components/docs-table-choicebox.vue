@@ -1,7 +1,5 @@
 <template>
-  <div class="choicebox-wrapper" v-show="visible">
-    {{style}}
-    {{visible}}
+  <div class="choicebox-wrapper" v-show="visible" :style="style">
   </div>
 </template>
 
@@ -39,9 +37,11 @@ export default {
       data.visible = val
     })
     const setBoxStyle = (x, y, w, h) => {
+      data.visible = true
+      // 因为容器 + 内滚动 + 定位的关系，xy轴要分别减掉容器offset值来实现定位正常
       style.value = {
-        top: y + 'px',
-        left: x + 'px',
+        left: x - 15 + 'px',
+        top: y - 10 + 'px',
         width: w + 'px',
         height: h + 'px'
       }
@@ -64,7 +64,8 @@ export default {
   top: 0;
   left: 0;
   border: 2px solid #e6674a;
-  z-index: 100;
+  z-index: 10;
   background-color: #fff;
+  box-sizing: border-box;
 }
 </style>
