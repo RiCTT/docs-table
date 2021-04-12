@@ -73,11 +73,13 @@ export default {
 .body-tr {
   .body-td {
     min-width: 50px;
-    line-height: 30px;
+    height: 29px;
+    line-height: 29px;
     font-size: 13px;
     border-bottom: 1px solid #e9ecef;
     border-right: 1px solid #e9ecef;
     background-color #fff;
+    box-sizing: border-box;
     &.left {
       position: -webkit-sticky;
       position: sticky;

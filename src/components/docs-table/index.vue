@@ -46,7 +46,8 @@ export default {
 
     const handleSetBox = (rect) => {
       const { x, y, width, height } = rect
-      choiceBoxRef.value.setBoxStyle(x, y, width, height)
+      // 因为容器 + 内滚动 + 定位的关系，left top轴要分别减掉容器offset值来实现定位正常
+      choiceBoxRef.value.setBoxStyle(x - 15, y - 10, width, height)
     }
 
     const handleScroll = (e) => {

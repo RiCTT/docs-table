@@ -76,6 +76,7 @@ export default {
   border-bottom: 1px solid #e9ecef;
   border-right: 1px solid #e9ecef;
   background-color #fff;
+  box-sizing: border-box;
   &:first-child {
     position: -webkit-sticky;
     position: sticky;
