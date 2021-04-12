@@ -77,9 +77,9 @@ export default {
       }, {})
     })
 
-    const handleHorizontalMove = (direction, moveX, isOppositeX) => {
+    const handleHorizontalMove = (direction, moveX, isPositiveX) => {
       const { left, width } = data.beforeTouchBoxRect
-      if (!isOppositeX && moveX < width) {
+      if (!isPositiveX && moveX < width) {
         return {
           left,
           width
@@ -87,12 +87,12 @@ export default {
       }
 
       // moveCount的计算需要根据当前占据了多少个单元
-      const moveCount = !isOppositeX
+      const moveCount = !isPositiveX
         ? Math.ceil(moveX / CELL_WIDTH) - Math.floor(width / CELL_WIDTH)
         : Math.ceil(moveX / CELL_WIDTH)
 
       const movePx = moveCount * CELL_WIDTH
-      const resultLeft = isOppositeX
+      const resultLeft = isPositiveX
         ? direction === 'left' ? left - movePx : left
         : direction === 'left' ? left : left - movePx
       const resultWidth = width + movePx
@@ -101,20 +101,20 @@ export default {
         width: resultWidth
       }
     }
-    const handleVerticalMove = (direction, moveY, isOppositeY) => {
+    const handleVerticalMove = (direction, moveY, isPositiveY) => {
       const { top, height } = data.beforeTouchBoxRect
-      if (!isOppositeY && moveY < height) {
+      if (!isPositiveY && moveY < height) {
         return {
           top,
           height
         }
       }
-      const moveCount = !isOppositeY
+      const moveCount = !isPositiveY
         ? Math.ceil(moveY / CELL_HEIGHT) - Math.floor(height / CELL_HEIGHT)
         : Math.ceil(moveY / CELL_HEIGHT)
 
       const movePx = moveCount * CELL_HEIGHT
-      const resultY = isOppositeY
+      const resultY = isPositiveY
         ? direction === 'top' ? top - movePx : top
         : direction === 'top' ? top : top - movePx
 
@@ -137,14 +137,15 @@ export default {
       const moveDisY = Math.abs(clientY - data.startTouch.clientY)
       // 垂直方向上是自定义的，根据left、right来取值
       const moveYDirection = direction === 'left' ? 'top' : 'bottom'
-      const isOppositeX = (direction === 'left' && data.startTouch.clientX > clientX) || (direction === 'right' && data.startTouch.clientX < clientX)
-      const isOppositeY = (moveYDirection === 'top' && data.startTouch.clientY > clientY) || (moveYDirection === 'bottom' && data.startTouch.clientY < clientY)
-      const { left, width } = handleHorizontalMove(direction, moveDisX, isOppositeX)
-      const { top, height } = handleVerticalMove(moveYDirection, moveDisY, isOppositeY)
+      // isPositiveX是否从起点出发，直接正方向的移动
+      const isPositiveX = (direction === 'left' && data.startTouch.clientX > clientX) || (direction === 'right' && data.startTouch.clientX < clientX)
+      const isPositiveY = (moveYDirection === 'top' && data.startTouch.clientY > clientY) || (moveYDirection === 'bottom' && data.startTouch.clientY < clientY)
+      const { left, width } = handleHorizontalMove(direction, moveDisX, isPositiveX)
+      const { top, height } = handleVerticalMove(moveYDirection, moveDisY, isPositiveY)
       setBoxStyle(left, top, width, height)
       e.preventDefault()
     }
-    const handleTouchEnd = (direction, e) => {
+    const handleTouchEnd = () => {
       data.beforeTouchBoxRect = { ...style.value }
     }
 
