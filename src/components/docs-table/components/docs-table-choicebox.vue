@@ -19,9 +19,7 @@
 
 <script>
 import { ref, reactive, toRefs, watch, computed } from 'vue'
-
-const CELL_WIDTH = 50
-const CELL_HEIGHT = 30
+import useTouchMove from '../composables/useTouchMove.js'
 
 export default {
   name: 'docs-table-choicebox',
@@ -55,6 +53,7 @@ export default {
       startTouch: null,
       beforeTouchBoxRect: null
     })
+
     watch(modelValue, (val) => {
       data.visible = val
     })
@@ -77,79 +76,9 @@ export default {
       }, {})
     })
 
-    const handleHorizontalMove = (direction, moveX, isPositiveX) => {
-      const { left, width } = data.beforeTouchBoxRect
-      if (!isPositiveX && moveX < width) {
-        return {
-          left,
-          width
-        }
-      }
-
-      // moveCount的计算需要根据当前占据了多少个单元
-      const moveCount = !isPositiveX
-        ? Math.ceil(moveX / CELL_WIDTH) - Math.floor(width / CELL_WIDTH)
-        : Math.ceil(moveX / CELL_WIDTH)
-
-      const movePx = moveCount * CELL_WIDTH
-      const resultLeft = isPositiveX
-        ? direction === 'left' ? left - movePx : left
-        : direction === 'left' ? left : left - movePx
-      const resultWidth = width + movePx
-      return {
-        left: resultLeft,
-        width: resultWidth
-      }
-    }
-    const handleVerticalMove = (direction, moveY, isPositiveY) => {
-      const { top, height } = data.beforeTouchBoxRect
-      if (!isPositiveY && moveY < height) {
-        return {
-          top,
-          height
-        }
-      }
-      const moveCount = !isPositiveY
-        ? Math.ceil(moveY / CELL_HEIGHT) - Math.floor(height / CELL_HEIGHT)
-        : Math.ceil(moveY / CELL_HEIGHT)
-
-      const movePx = moveCount * CELL_HEIGHT
-      const resultY = isPositiveY
-        ? direction === 'top' ? top - movePx : top
-        : direction === 'top' ? top : top - movePx
-
-      const resultHeight = height + (moveCount * CELL_HEIGHT)
-      return {
-        top: resultY,
-        height: resultHeight
-      }
-    }
-
-    const handleTouchStart = (direction, e) => {
-      const touch = e.touches[0]
-      data.beforeTouchBoxRect = { ...style.value }
-      data.startTouch = touch
-    }
-    const handleTouchMove = (direction, e) => {
-      const touch = e.touches[0]
-      const { clientX, clientY } = touch
-      const moveDisX = Math.abs(clientX - data.startTouch.clientX)
-      const moveDisY = Math.abs(clientY - data.startTouch.clientY)
-      // 垂直方向上是自定义的，根据left、right来取值
-      const moveYDirection = direction === 'left' ? 'top' : 'bottom'
-      // isPositiveX是否从起点出发，直接正方向的移动
-      const isPositiveX = (direction === 'left' && data.startTouch.clientX > clientX) || (direction === 'right' && data.startTouch.clientX < clientX)
-      const isPositiveY = (moveYDirection === 'top' && data.startTouch.clientY > clientY) || (moveYDirection === 'bottom' && data.startTouch.clientY < clientY)
-      const { left, width } = handleHorizontalMove(direction, moveDisX, isPositiveX)
-      const { top, height } = handleVerticalMove(moveYDirection, moveDisY, isPositiveY)
-      setBoxStyle(left, top, width, height)
-      e.preventDefault()
-    }
-    const handleTouchEnd = () => {
-      data.beforeTouchBoxRect = { ...style.value }
-    }
-
     const dataAsRefs = toRefs(data)
+
+    const { handleTouchStart, handleTouchMove, handleTouchEnd } = useTouchMove(style, setBoxStyle)
 
     return {
       style,
