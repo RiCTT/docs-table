@@ -1,5 +1,5 @@
 <template>
-  <div class="choicebox-wrapper" v-show="visible" :style="boxStyleWithPx">
+  <div ref="choiceboxRef" class="choicebox-wrapper" v-show="visible" :style="boxStyleWithPx">
     <span
       class="dot dot-lefttop"
       @touchstart="handleTouchStart('left', $event)"
@@ -45,8 +45,9 @@ export default {
       default: 0
     }
   },
-  setup (props) {
+  setup (props, context) {
     const { modelValue } = toRefs(props)
+    const choiceboxRef = ref(null)
     const style = ref({})
     const data = reactive({
       visible: modelValue.value,
@@ -78,12 +79,13 @@ export default {
 
     const dataAsRefs = toRefs(data)
 
-    const { handleTouchStart, handleTouchMove, handleTouchEnd } = useTouchMove(style, setBoxStyle)
+    const { handleTouchStart, handleTouchMove, handleTouchEnd } = useTouchMove(style, setBoxStyle, context, choiceboxRef)
 
     return {
       style,
       boxStyleWithPx,
       setBoxStyle,
+      choiceboxRef,
       handleTouchStart,
       handleTouchMove,
       handleTouchEnd,
@@ -100,7 +102,6 @@ export default {
   left: 0;
   border: 2px solid #e6674a;
   z-index: 10;
-  background-color: #fff;
   box-sizing: border-box;
 }
 

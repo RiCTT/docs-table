@@ -3,8 +3,9 @@ import { reactive, ref, watch } from 'vue'
 const CELL_WIDTH = 50
 const CELL_HEIGHT = 30
 
-export default function useTouchMove (style, setBoxStyle) {
+export default function useTouchMove (style, setBoxStyle, context, choiceboxRef) {
   const boxStyle = ref({})
+  const timer = ref(null)
   const _data = reactive({
     startTouch: null,
     beforeTouchBoxRect: null
@@ -68,7 +69,9 @@ export default function useTouchMove (style, setBoxStyle) {
     _data.startTouch = touch
     _data.beforeTouchBoxRect = { ...boxStyle.value }
   }
+
   const handleTouchMove = (direction, e) => {
+    console.log('move')
     const touch = e.touches[0]
     const { clientX, clientY } = touch
     const moveDisX = Math.abs(clientX - _data.startTouch.clientX)
@@ -81,10 +84,33 @@ export default function useTouchMove (style, setBoxStyle) {
     const { left, width } = handleHorizontalMove(direction, moveDisX, isPositiveX)
     const { top, height } = handleVerticalMove(moveYDirection, moveDisY, isPositiveY)
     setBoxStyle(left, top, width, height)
+    handleScrollWrapper(touch)
     e.preventDefault()
   }
+
   const handleTouchEnd = () => {
+    if (timer.value) {
+      clearInterval(timer.value)
+    }
     _data.beforeTouchBoxRect = { ...boxStyle.value }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleScrollWrapper = (touch) => {
+    // const t = touch
+    // if (timer.value) return
+    // timer.value = setInterval(() => {
+    //   console.log(t.clientX)
+    // }, 1000)
+
+    // const rect = choiceboxRef.value.getBoundingClientRect()
+    // const winWidth = window.innerWidth
+    // const { right } = rect
+    // if (right + CELL_WIDTH > winWidth) {
+    //   if (isPositiveX) {
+    //     context.emit('go-scroll')
+    //   }
+    // }
   }
 
   return {
@@ -92,6 +118,7 @@ export default function useTouchMove (style, setBoxStyle) {
     handleVerticalMove,
     handleTouchStart,
     handleTouchMove,
-    handleTouchEnd
+    handleTouchEnd,
+    handleScrollWrapper
   }
 }

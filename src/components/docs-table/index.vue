@@ -1,9 +1,9 @@
 <template>
-	<div class="table-wrapper" @scroll="handleScroll">
+	<div ref="scrollRef" class="table-wrapper" @scroll="handleScroll">
     <div class="inner-wrapper">
       <docs-table-header :headers="headers" :scrollLeft="scrollLeft" @set-box="handleSetBox"></docs-table-header>
       <docs-table-body :columns="columns" :scrollTop="scrollTop" :scrollLeft="scrollLeft" @set-box="handleSetBox"></docs-table-body>
-      <docs-table-choiceBox ref="choiceBoxRef" v-model="showBox"></docs-table-choiceBox>
+      <docs-table-choiceBox ref="choiceBoxRef" v-model="showBox" @go-scroll="handleGoScroll"></docs-table-choiceBox>
     </div>
 	</div>
 </template>
@@ -21,6 +21,7 @@ export default {
     const columns = ref([])
     const showBox = ref(false)
     const choiceBoxRef = ref(null)
+    const scrollRef = ref(null)
     const data = reactive({ scrollTop: 0, scrollLeft: 0 })
 
     const getHeaders = () => {
@@ -55,6 +56,13 @@ export default {
       const { scrollTop, scrollLeft } = target
       data.scrollTop = scrollTop
       data.scrollLeft = scrollLeft
+      console.log('scroll')
+    }
+
+    const handleGoScroll = (x, y) => {
+      console.log(x, y)
+      console.log(scrollRef)
+      scrollRef.value.scrollLeft++
     }
 
     const dataAsRefs = toRefs(data)
@@ -65,7 +73,9 @@ export default {
       showBox,
       handleSetBox,
       choiceBoxRef,
+      scrollRef,
       handleScroll,
+      handleGoScroll,
       ...dataAsRefs
     }
   }
