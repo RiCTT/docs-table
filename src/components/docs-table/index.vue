@@ -56,13 +56,10 @@ export default {
       const { scrollTop, scrollLeft } = target
       data.scrollTop = scrollTop
       data.scrollLeft = scrollLeft
-      console.log('scroll')
     }
 
     const handleGoScroll = (x, y) => {
-      console.log(x, y)
-      console.log(scrollRef)
-      scrollRef.value.scrollLeft++
+      scrollRef.value.scrollLeft += 25
     }
 
     const dataAsRefs = toRefs(data)

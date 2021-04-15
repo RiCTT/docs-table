@@ -84,33 +84,33 @@ export default function useTouchMove (style, setBoxStyle, context, choiceboxRef)
     const { left, width } = handleHorizontalMove(direction, moveDisX, isPositiveX)
     const { top, height } = handleVerticalMove(moveYDirection, moveDisY, isPositiveY)
     setBoxStyle(left, top, width, height)
-    handleScrollWrapper(touch)
+    handleScrollWrapper(isPositiveX, touch, left, top, width, height)
     e.preventDefault()
   }
 
-  const handleTouchEnd = () => {
+  const _handleTimerForGC = () => {
     if (timer.value) {
       clearInterval(timer.value)
+      timer.value = null
     }
+  }
+
+  const handleTouchEnd = () => {
+    console.log('!!! touch end !!')
+    _handleTimerForGC()
     _data.beforeTouchBoxRect = { ...boxStyle.value }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleScrollWrapper = (touch) => {
-    // const t = touch
-    // if (timer.value) return
-    // timer.value = setInterval(() => {
-    //   console.log(t.clientX)
-    // }, 1000)
-
-    // const rect = choiceboxRef.value.getBoundingClientRect()
-    // const winWidth = window.innerWidth
-    // const { right } = rect
-    // if (right + CELL_WIDTH > winWidth) {
-    //   if (isPositiveX) {
-    //     context.emit('go-scroll')
-    //   }
-    // }
+  const handleScrollWrapper = (isPositiveX, touch) => {
+    /**
+     * 0、开始参数
+     *  0.1、获得可以滚动的边界值，left，right（水平）
+     *  0.2、checkbox当前的位置（用来判断是否需要更新choickbox的位置和大小）
+     *  0.3、鼠标的当前位置（用来判断是否需要开启定时器）
+     * 1、move的时候开启一个定时器（用来滚动容器），结束end事件清除
+     *  1.1、轮询判断是否需要判断滚动 + 更新choicebox的位置大小（需要同步，最好每次都+25）
+     * */
   }
 
   return {
