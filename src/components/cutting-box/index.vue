@@ -15,6 +15,11 @@
  *  3、水印
  *    3.1、支持上传水印图片
  *    3.2、拖拽水印位置
+ *  4、其他
+ *    4.1、支持pc、移动端
+ * 基础支持
+ *  1、Button组件
+ *  2、Modal组件
  */
 export default {
   name: 'CuttingBox'
