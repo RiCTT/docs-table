@@ -3,6 +3,7 @@ import { reactive, ref, watch } from 'vue'
 const CELL_WIDTH = 50
 const CELL_HEIGHT = 30
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function useTouchMove (style, setBoxStyle, context, choiceboxRef) {
   const boxStyle = ref({})
   const timer = ref(null)

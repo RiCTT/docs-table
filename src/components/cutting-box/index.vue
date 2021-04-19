@@ -1,5 +1,11 @@
 <template>
-  <div></div>
+  <div>
+    <WheelButton @click="handleClick">按钮</WheelButton>
+    <WheelModal v-model="visible">
+      123
+    </WheelModal>
+    <WheelIcon name="test"></WheelIcon>
+  </div>
 </template>
 
 <script>
@@ -21,8 +27,33 @@
  *  1、Button组件
  *  2、Modal组件
  */
+import WheelButton from '@/components/wheel-button/index'
+import WheelModal from '@/components/wheel-modal/index'
+import { reactive, toRefs } from 'vue'
+
 export default {
-  name: 'CuttingBox'
+  name: 'CuttingBox',
+  components: {
+    WheelButton,
+    WheelModal
+  },
+  setup () {
+    const data = reactive({
+      visible: false
+    })
+    const handleClick = (e) => {
+      console.log(e)
+      data.visible = !data.visible
+    }
+
+    const dataAsRefs = toRefs(data)
+
+    return {
+      handleClick,
+      visible2: true,
+      ...dataAsRefs
+    }
+  }
 }
 </script>
 

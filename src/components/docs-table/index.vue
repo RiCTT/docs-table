@@ -58,6 +58,7 @@ export default {
       data.scrollLeft = scrollLeft
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleGoScroll = (x, y) => {
       scrollRef.value.scrollLeft += 25
     }
