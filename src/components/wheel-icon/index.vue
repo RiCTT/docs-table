@@ -6,6 +6,11 @@
 
 <script setup>
 import { defineProps, computed } from 'vue'
+
+const requireAll = requireContext => requireContext.keys().map(requireContext)
+const req = require.context('./svg', false, /\.svg$/)
+requireAll(req)
+
 const props = defineProps({
   name: {
     type: String,
