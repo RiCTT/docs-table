@@ -1,19 +1,23 @@
 <template>
   <Teleport :to="to" :disabled="disabled">
-    <div class="modal-wrapper" v-if="modalVisible">
-      <div class="modal-mask"></div>
-      <div class="modal-body">
-        <div class="modal-content">
-          <slot />
-        </div>
-        <slot name="footer">
-          <div class="modal-default-footer">
-            <WheelButton @click="handleClick">取消</WheelButton>
-            <WheelButton @click="handleClick" type="primary">保存</WheelButton>
+    <transition name="fade">
+      <div class="modal-wrapper" v-if="modalVisible">
+        <div class="modal-mask"></div>
+        <div class="modal-body">
+          <div class="modal-content">
+            <slot />
           </div>
-        </slot>
+          <slot name="footer">
+            <div class="modal-default-footer">
+              <WheelButton @click="handleClick">取消</WheelButton>
+              <WheelButton @click="handleClick" type="primary"
+                >保存</WheelButton
+              >
+            </div>
+          </slot>
+        </div>
       </div>
-    </div>
+    </transition>
   </Teleport>
 </template>
 
@@ -40,9 +44,12 @@ export default {
   },
   setup (props, context) {
     const modalVisible = ref(props.modelValue)
-    watch(() => props.modelValue, (val) => {
-      modalVisible.value = val
-    })
+    watch(
+      () => props.modelValue,
+      (val) => {
+        modalVisible.value = val
+      }
+    )
 
     const handleClick = () => {
       modalVisible.value = false
@@ -53,11 +60,18 @@ export default {
       handleClick
     }
   }
-
 }
 </script>
 
 <style lang="stylus" scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 .modal-wrapper {
   position: fixed;
   top: 0;
@@ -82,13 +96,15 @@ export default {
       padding: 15px 20px;
     }
   }
+
   .modal-mask {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
     z-index: 10;
   }
+
   .modal-default-footer {
     width: 100%;
     padding: 10px 15px;
